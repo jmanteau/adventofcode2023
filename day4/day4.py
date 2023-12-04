@@ -8,14 +8,19 @@ logger.remove()
 logger.add(lambda msg: print(msg, end=""), level=LOGLEVEL)  # Change level to control what gets printed
 
 
+def parse_game(card):
+    cardname, gameresults = card.split(":")
+    _numberplayed, _numberresults = gameresults.split("|")
+    numberplayed = set([x.strip() for x in _numberplayed.split(" ") if x.strip()])
+    numberresults = set([x.strip() for x in _numberresults.split(" ") if x.strip()])
+    winnings = numberplayed & numberresults
+    return cardname, winnings
+
+
 def part1(data):
     totalscore = 0
     for card in data:
-        cardname, gameresults = card.split(":")
-        _numberplayed, _numberresults = gameresults.split("|")
-        numberplayed = set([x.strip() for x in _numberplayed.split(" ") if x.strip()])
-        numberresults = set([x.strip() for x in _numberresults.split(" ") if x.strip()])
-        winnings = numberplayed & numberresults
+        cardname, winnings = parse_game(card)
 
         if winnings:
             power = len(winnings) - 1
@@ -28,15 +33,10 @@ def part2(data):
     cards = {}
 
     for card in data:
-        cardname, gameresults = card.split(":")
-        _numberplayed, _numberresults = gameresults.split("|")
-        numberplayed = set([x.strip() for x in _numberplayed.split(" ") if x.strip()])
-        numberresults = set([x.strip() for x in _numberresults.split(" ") if x.strip()])
-        winnings = numberplayed.intersection(numberresults)
+        cardname, winnings = parse_game(card)
         cards[cardname.split(" ")[-1]] = len(winnings)
 
     total = defaultdict(int)
-
     for cardnb, nbaddcards in cards.items():
         total[cardnb] += 1
         logger.debug(f"Original Card {cardnb}. Now having {total[cardnb]} of them ")
