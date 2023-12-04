@@ -15,5 +15,5 @@ I will document in this post the main interesting things for each day.
 
 
 
-All the day logs are in the post https://jmanteau.fr//posts/advent-of-code-2023
+All the day logs are in the post https://jmanteau.fr/posts/advent-of-code-2023
 
