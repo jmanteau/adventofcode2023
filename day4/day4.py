@@ -15,7 +15,7 @@ def part1(data):
         _numberplayed, _numberresults = gameresults.split("|")
         numberplayed = set([x.strip() for x in _numberplayed.split(" ") if x.strip()])
         numberresults = set([x.strip() for x in _numberresults.split(" ") if x.strip()])
-        winnings = numberplayed.intersection(numberresults)
+        winnings = numberplayed & numberresults
 
         if winnings:
             power = len(winnings) - 1
