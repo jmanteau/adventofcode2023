@@ -1,3 +1,4 @@
+import timeit
 from collections import defaultdict
 
 from loguru import logger
@@ -67,6 +68,11 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 
 # data = [x for x in rawdata.splitlines() if x]
 
-
-# print(part1(data))
+print(part1(data))
 print(part2(data))
+
+execution_time = timeit.timeit("part1(data)", globals=globals(), number=1000)
+print(f"Execution time Part1: {execution_time} seconds")
+
+execution_time = timeit.timeit("part2(data)", globals=globals(), number=1000)
+print(f"Execution time Part2: {execution_time} seconds")
