@@ -30,7 +30,6 @@ def part1(data):
 
 
 def part2(data):
-    nbcards = 0
     cards = {}
 
     for card in data:

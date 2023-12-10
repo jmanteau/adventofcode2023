@@ -1,3 +1,4 @@
+import itertools
 from collections import defaultdict
 
 from loguru import logger
@@ -80,10 +81,11 @@ def map_seed_to_location(seed, all_mappings):
     return current_number
 
 
-def find_destination_range(source_range, mappings):
+def find_destination_ranges(source_range, mappings):
     """
     Given a source range and mappings, finds the corresponding destination range.
     """
+    logger.debug(f"Receiving {source_range}")
     src_start, src_end = source_range
     destination_ranges = []
     prev_end = src_start - 1
@@ -110,7 +112,7 @@ def find_destination_range(source_range, mappings):
     if prev_end < src_end:
         destination_ranges.append((prev_end + 1, src_end))
 
-    return merge_ranges(destination_ranges)
+    return destination_ranges
 
 
 def merge_ranges(ranges):
@@ -135,14 +137,17 @@ def merge_ranges(ranges):
 
 
 def map_seed_to_location_range(seed, all_mappings):
-    current_range = seed
+    current_ranges = [seed]
     for category in all_mappings:
         logger.debug(f"Mapping {category}")
-        old_range = current_range
-        current_range = find_destination_range(current_range, all_mappings[category])
-        logger.info(f"For {category}, {old_range} -> {current_range}")
+        future_ranges = []
+        for range in current_ranges:
+            for outranges in find_destination_ranges(range, all_mappings[category]):
+                future_ranges.append(outranges)
+        logger.info(f"For {category}, {current_ranges} -> {future_ranges}")
+        current_ranges = future_ranges
 
-    return current_range
+    return current_ranges
 
 
 def part1(data):
@@ -151,21 +156,28 @@ def part1(data):
     lowest_location = min([map_seed_to_location(seedr, maps) for seedr in seeds])
     logger.info(f"Lowest location {lowest_location}")
     logger.debug("Part 1 end")
+    return lowest_location
 
 
 def part2(data):
     logger.info("Part 2 start")
     seeds, maps = parsefile2(data)
-    # lowest_location = float("inf")
 
-    lowest_location = min([map_seed_to_location_range(seed, maps) for seed in seeds])
+    # lowest_location = float("inf")
+    location_ranges = [map_seed_to_location_range(seed, maps) for seed in seeds]
+    flatten = list(itertools.chain.from_iterable(itertools.chain.from_iterable(location_ranges)))
+    import ipdb
+
+    ipdb.set_trace()
+    lowest_location = min(flatten)
 
     logger.info(f"Lowest location {lowest_location}")
     logger.debug("Part 2 end")
+    return lowest_location
 
 
 if __name__ == "__main__":
-    DEV = True
+    DEV = False
 
     if DEV:
         LOGLEVEL = "DEBUG"
