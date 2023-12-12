@@ -1,18 +1,19 @@
-from loguru import logger
 from pathlib import Path
+
+from loguru import logger
+
 
 def part1(data):
     logger.info("Part 1 start")
     logger.debug("Part 1 end")
+
 
 def part2(data):
     logger.info("Part 2 start")
     logger.debug("Part 2 end")
 
 
-
-if __name__=='__main__':
-
+if __name__ == "__main__":
     DEV = True
 
     if DEV:

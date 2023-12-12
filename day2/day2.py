@@ -65,7 +65,7 @@ def part2(data):
     return result
 
 
-with open("input.txt") as file:
+with open("day2/input.txt") as file:
     data = file.readlines()
 print(part1(data))
 
